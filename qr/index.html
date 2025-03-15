@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="text" name="" id="input_filed">
+        <br/>
+        <div id="result">
+            <img id="qr-image" src="" alt="">
+            <button onclick="generateQR()" id="qr_button">Generate Qr</button>
+            <button onclick="downloadQR()" id="download_button">Download QR</button>
+        </div>
+        
+    </div>
+    <script>
+      const inputFiled = document.getElementById('input_filed')
+      const qrGenerateButton = document.getElementById('qr_button')
+      const downloadButton = document.getElementById('download_button')
+      const qrImage = document.getElementById('qr-image')
+
+      
+
+      const qrApi =  'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='
+    //   console.log(inputFiled);
+    const generateQR = () =>{
+            const inputText = inputFiled.value
+            const imUrl = qrImage.src = qrApi+ encodeURIComponent(inputText)
+    }
+
+    const downloadQR = () =>{
+        const inputText = inputFiled.value
+        const imUrl = qrImage.src = qrApi+ encodeURIComponent(inputText)
+        fetch(imUrl)
+        .then(res => res.blob())
+        .then(blob =>{
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(blob)
+            link.download = 'qr.jpg';
+            link.click()
+        })
+
+    }
+
+    </script>
+</body>
+</html>

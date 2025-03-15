@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .generate-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .strength {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Password Generator</h2>
+        <input type="text" id="passwordInput" readonly>
+        <br>
+        <button class="generate-btn" onclick="createPassword()">Generate Password</button>
+        <button class="copy-btn" onclick="copyPassword()">Copy</button>
+        <p>Password Strength: <span id="passwordStrength">-</span></p>
+    </div>
+
+    <script>
+        const passwordInputField = document.getElementById("passwordInput");
+        const passwordStrengthText = document.getElementById("passwordStrength");
+        const passwordLength = 12;
+
+        const upperCase = "ABCDEFGHIJKLMNOPQRSTVXYZ";
+        const lowerCase = "abcdefghijklmnopqrstvxyz";
+        const number = "0123456789";
+        const symbol = "!@#$%^&*(){}[]<>/-=?";
+        const allChars = upperCase + lowerCase + number + symbol;
+
+        function createPassword() {
+            let password = "";
+            password += upperCase[Math.floor(Math.random() * upperCase.length)];
+            password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+            password += number[Math.floor(Math.random() * number.length)];
+            password += symbol[Math.floor(Math.random() * symbol.length)];
+
+            while (password.length < passwordLength) {
+                password += allChars[Math.floor(Math.random() * allChars.length)];
+            }
+
+            passwordInputField.value = password;
+            checkPasswordStrength(password);
+        }
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            if (strength <= 2) {
+                passwordStrengthText.textContent = "Weak";
+                passwordStrengthText.style.color = "red";
+            } else if (strength <= 4) {
+                passwordStrengthText.textContent = "Medium";
+                passwordStrengthText.style.color = "orange";
+            } else {
+                passwordStrengthText.textContent = "Strong";
+                passwordStrengthText.style.color = "green";
+            }
+        }
+
+        function copyPassword() {
+            passwordInputField.select();
+            document.execCommand("copy");
+            alert("Password copied to clipboard!");
+        }
+    </script>
+
+</body>
+</html>
